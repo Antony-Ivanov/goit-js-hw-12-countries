@@ -41,6 +41,7 @@ function dataPreview(countries) {
     refs.countriesMarkup.innerHTML = templateCardCountries(...countries);
   }
 }
+console.log(countries)
 
 function errorMessage(message) {
   error({
