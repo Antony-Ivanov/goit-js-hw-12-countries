@@ -1,59 +1,27 @@
-import './sass/main.scss';
+<!DOCTYPE html>
+<html lang="ru">
 
-import refs from './js/refs';
-import API from './js/fetchCountries';
-import orderCountries from './templates/cardCountries';
-import templateCardCountries from './templates/templateCountries';
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Заголовок страницы</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.0.0/modern-normalize.min.css"
+    integrity="sha512-ISS7cAi1PEhQ8jnbJpJZMd29NlhNj4AWYyLOSp2CE/CsHxTCu+r+t0D2yoJudVrd0/8fTVPUVDzY5Tvli75u/g=="
+    crossorigin="anonymous" />
+  <link href="../node_modules/@pnotify/core/dist/PNotify.css" rel="stylesheet" type="text/css" />
+  <link href="../node_modules/@pnotify/mobile/dist/PNotifyMobile.css" rel="stylesheet" type="text/css" />
+</head>
 
-import debounce from 'lodash.debounce';
+<body>
+  <h1 class="title">Search country</h1>
+  <input class="search" type="text" placeholder="enter country name">
+  <div class="countries_conteiner js-counries"></div>
 
-import { error, notice } from '../node_modules/@pnotify/core/dist/PNotify.js';
+  <!-- Так добавляются фрагменты в главные HTML-файлы страниц. -->
+  <!-- <include src="./partials/example.html"></include> -->
 
-import '@pnotify/core/dist/PNotify.css';
-import '@pnotify/core/dist/BrightTheme.css';
+  <!-- Скрипт идёт последним в разметке. В нём уже подключен главный SASS-файл. -->
+  <script src="./index.js"></script>
+</body>
 
-function searchInput(e) {
-  const searchQuery = e.target.value;
-  refs.countriesMarkup.innerHTML = '';
-
-  if (searchQuery.length < 1 && searchQuery === '') return;
-
-  API.fetchCountries(searchQuery).then(dataPreview).catch(noticeInfo);
-}
-
-function dataPreview(countries) {
-  if (countries.length > 10) {
-    error({
-      text: 'Too many matches found. Please enter a more specific query!',
-      delay: 5000,
-    });
-  }
-
-  if (countries.status === 404) {
-    errorMessage('Nothing was found for your query!');
-  }
-
-  if (countries.length > 1 && countries.length < 10) {
-    refs.countriesMarkup.innerHTML = orderCountries(countries);
-  }
-
-  if (countries.length === 1) {
-    refs.countriesMarkup.innerHTML = templateCardCountries(...countries);
-  }
-}
-
-function errorMessage(message) {
-  error({
-    title: `${message}`,
-    delay: 2000,
-  });
-}
-
-const noticeInfo = () => {
-  notice({
-    text: 'Ivalid entered value',
-    delay: 2000,
-  });
-};
-
-refs.search.addEventListener('input', debounce(searchInput, 500));
+</html>
